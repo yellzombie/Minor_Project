@@ -1,7 +1,8 @@
 import express from "express"
+import AuctionsCtrl from "./auctions.controller.js "
 
 const router = express.Router()
 
-router.route("/").get((req, res) => res.send("hello world"))
+router.route("/").get(AuctionsCtrl.apiGetAuctions)
 
-export default router
+export default router 
