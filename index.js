@@ -1,23 +1,20 @@
-import app from "./server.js"
-import mongodb from "mongodb"
-import dotenv from "dotenv"
-dotenv.config()
-const MongoClient = mongodb.MongoClient
+const express = require('express');
+const app = express();
+const bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
+app.use(express.static('public'));
+const pug = require('pug');
+const path  = require('path');
+app.set("view engine", "pug");
+app.set('views', path.join(__dirname, '../views'));
+const router = require('./routes/index.js');
+app.use(router);
 
-const port = process.env.PORT || 8000
 
-MongoClient.connect(
-  process.env.Auction_DB_URI,
-  {
-    maxPoolSize: 50,
-    wtimeoutMS: 2500,}
-  )
-  .catch(err => {
-    console.error(err.stack)
-    process.exit(1)
-  })
-  .then(async client => {
-    app.listen(port, () => {
-      console.log(`listening on port ${port}`)
-    })
-  })
+const port = process.env.PORT || 3000;
+
+app.listen(port, err => {
+    if(err) throw err;
+    console.log(`server running on port: ${port}`);
+});
